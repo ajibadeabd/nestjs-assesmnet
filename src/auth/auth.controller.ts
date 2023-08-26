@@ -20,6 +20,6 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto, @Res() response: Response) {
     const result = await this.authService.login(loginUserDto);
-    return HttpResponse.created(response, result, 'User created successfully');
+    return HttpResponse.ok(response, result, 'User created successfully');
   }
 }

@@ -7,7 +7,6 @@ export class DatabaseService implements OnModuleInit {
   private readonly pool: Pool;
 
   constructor(private readonly configService: ConfigService) {
-    console.log("Ddd");
     this.pool = new Pool({
       user: this.configService.get<string>('DB_USER', 'postgres'),
       host: this.configService.get<string>('DB_HOST', 'localhost'),

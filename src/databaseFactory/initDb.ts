@@ -23,15 +23,25 @@ const pool = new Pool({
     );
     
     CREATE TABLE IF NOT EXISTS plans (
-      id UUID PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      description TEXT,
-      price DECIMAL(10, 2) NOT NULL,
-      created_at TIMESTAMP DEFAULT NOW(),
-      updated_at TIMESTAMP,
-      user_id UUID,
-      FOREIGN KEY (user_id) REFERENCES users(id)
-    );    
+  id UUID PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  price DECIMAL(10, 2) NOT NULL,
+  billing_cycle VARCHAR(20) NOT NULL,
+  subscription_tier VARCHAR(50),
+  usage_limits JSONB,  
+  additional_charges TEXT,
+  renewal_date DATE,
+  expiration_date DATE,
+  currency VARCHAR(10) NOT NULL,
+  payment_frequency VARCHAR(20) NOT NULL,
+  cancellation_policy TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP,
+  user_id UUID NOT NULL,
+  UNIQUE (user_id, subscription_tier),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
     CREATE OR REPLACE FUNCTION update_updated_at()
     RETURNS TRIGGER AS $$
