@@ -44,6 +44,7 @@ FROM plans;
         plans.payment_frequency AS billing_cycle,
         plans.usage_limits AS plan_usage,
         plans.price AS plan_price,
+        usage_history.end_date AS usage_history_end_date,
         plans.subscription_tier AS plan_subscription_tier,
          usage_history.api_usage,
          usage_history.storage_usage

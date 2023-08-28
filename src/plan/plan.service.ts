@@ -29,6 +29,9 @@ export class PlansService {
         userId,
       });
 
+    if (subscriptionResponse.usage_history_end_date > new Date()) {
+      throw new HttpException('not yet time to bill user', 400);
+    }
     this.brokerService.processBilling(subscriptionResponse);
 
     console.log('done');
@@ -74,10 +77,10 @@ export class PlansService {
   }
   async initializePayment(planId: string, user: IUser) {
     if (user.plan_id) {
-      throw new HttpException(
-        'You are already subscribed to a plan. You cannot subscribe again.',
-        400,
-      );
+      // throw new HttpException(
+      //   'You are already subscribed to a plan. You cannot subscribe again.',
+      //   400,
+      // );
     }
     const plan = await this.planDataFactory.getPlan(planId);
 
