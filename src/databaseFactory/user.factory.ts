@@ -12,7 +12,7 @@ export class UserDataFactory {
   async getUser(
     queryParameters: { [key: string]: string },
     excludeProperties = false,
-    plan = false,
+    subscriptions = false,
   ): Promise<IUser | null> {
     const select = excludeProperties
       ? 'users.id, name, email, users.created_at, users.updated_at'
@@ -30,16 +30,16 @@ export class UserDataFactory {
       WHERE ${conditions};
       
     `;
-    if (plan) {
+    if (subscriptions) {
       query = `
               SELECT users.*,
               (
-              SELECT json_agg(plans)
-              FROM plans
-              WHERE plans.user_id = users.id
-              ) AS plans
+              SELECT json_agg(subscriptions)
+              FROM subscriptions
+              WHERE subscriptions.user_id = users.id
+              ) AS subscriptions
               FROM users
-              LEFT JOIN plans ON users.id = plans.user_id
+              LEFT JOIN subscriptions ON users.id = subscriptions.user_id
               WHERE users.id = $1
               GROUP BY users.id;
               `;

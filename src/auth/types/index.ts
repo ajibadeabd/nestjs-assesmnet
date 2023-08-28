@@ -1,25 +1,31 @@
-// create-user.dto.ts
-import { IsNotEmpty, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger'; // Import ApiProperty
 
+// create-user.dto.ts
 export class CreateUserDto {
-  @IsNotEmpty()
+  @ApiProperty({ example: 'John Doe' })
+  @IsNotEmpty({ message: 'Name cannot be empty' })
+  @IsString()
   name: string;
 
-  @IsNotEmpty()
-  @IsEmail()
+  @ApiProperty({ example: 'johndoe@example.com' })
+  @IsNotEmpty({ message: 'Email cannot be empty' })
+  @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 
-  @IsNotEmpty()
+  @ApiProperty({ example: 'secretpassword' })
+  @IsNotEmpty({ message: 'Password cannot be empty' })
   password: string;
 }
 
 // login-user.dto.ts
-
 export class LoginUserDto {
-  @IsNotEmpty()
-  @IsEmail()
+  @ApiProperty({ example: 'johndoe@example.com' })
+  @IsNotEmpty({ message: 'Email cannot be empty' })
+  @IsEmail({}, { message: 'Invalid email format' })
   email: string;
 
-  @IsNotEmpty()
+  @ApiProperty({ example: 'secretpassword' })
+  @IsNotEmpty({ message: 'Password cannot be empty' })
   password: string;
 }

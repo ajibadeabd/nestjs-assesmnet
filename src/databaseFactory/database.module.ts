@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseService } from './dbPool';
 import { UserDataFactory } from './user.factory';
-import { PlanDataFactory } from './plan.factory';
+import { SubscriptionDataFactory } from './subscription.factory';
 
 @Module({
   imports: [ConfigModule.forRoot()],
   controllers: [],
-  providers: [DatabaseService, UserDataFactory, PlanDataFactory],
-  exports: [DatabaseService, UserDataFactory, PlanDataFactory],
+  providers: [DatabaseService, UserDataFactory, SubscriptionDataFactory],
+  exports: [DatabaseService, UserDataFactory, SubscriptionDataFactory],
 })
 export class DatabaseModule {}

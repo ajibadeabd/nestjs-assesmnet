@@ -22,7 +22,7 @@ const pool = new Pool({
       updated_at TIMESTAMP
     );
     
-    CREATE TABLE IF NOT EXISTS plans (
+    CREATE TABLE IF NOT EXISTS subscriptions (
   id UUID PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   description TEXT,
@@ -42,6 +42,20 @@ const pool = new Pool({
   UNIQUE (user_id, subscription_tier),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+    CREATE TABLE IF NOT EXISTS usage_history (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL,
+    subscription_id UUID NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    usage_details JSONB,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (subscription_id) REFERENCES subscriptions(id)
+  );
+
 
     CREATE OR REPLACE FUNCTION update_updated_at()
     RETURNS TRIGGER AS $$

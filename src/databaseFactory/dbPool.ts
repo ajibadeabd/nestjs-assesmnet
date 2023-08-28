@@ -1,10 +1,11 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
   private readonly pool: Pool;
+  private poolClient: PoolClient;
 
   constructor(private readonly configService: ConfigService) {
     this.pool = new Pool({
@@ -18,7 +19,7 @@ export class DatabaseService implements OnModuleInit {
 
   async onModuleInit() {
     try {
-      await this.pool.connect();
+      this.poolClient = await this.pool.connect();
       console.log('Database connection established');
     } catch (error) {
       console.error('Error establishing database connection:', error);
@@ -26,6 +27,10 @@ export class DatabaseService implements OnModuleInit {
   }
 
   async query(sql: string, params?: any[]): Promise<any> {
-    return await this.pool.query(sql, params);
+    return await this.poolClient.query(sql, params);
+  }
+  async closePool(): Promise<void> {
+    await this.poolClient.release();
+    await this.pool.end();
   }
 }

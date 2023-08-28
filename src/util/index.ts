@@ -34,7 +34,7 @@ export const calculateRenewalAndExpiration = (billingCycle, currentDate) => {
       .toString()
       .split('T');
 
-    return { renewalDate, expirationDate };
+    return { renewalDate, expirationDate, startDate: now };
   } else if (billingCycle === 'Annually') {
     const nextYear = new Date(now);
     nextYear.setFullYear(nextYear.getFullYear() + 1);
@@ -46,6 +46,6 @@ export const calculateRenewalAndExpiration = (billingCycle, currentDate) => {
       .toString()
       .split('T')[0];
 
-    return { renewalDate, expirationDate };
+    return { renewalDate, expirationDate, startDate: nextYear };
   }
 };

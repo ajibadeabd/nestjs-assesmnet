@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/auth/types';
-import { DatabaseService } from '../databaseFactory/dbPool';
 import { IUser } from './type';
 import { UserDataFactory } from '../databaseFactory/user.factory';
+import { SubscriptionDataFactory } from '../databaseFactory/subscription.factory';
 
 @Injectable()
 export class UserService {
   constructor(
-    // private databaseService: DatabaseService,
     private userDataFactory: UserDataFactory,
+    private subscriptionDataFactory: SubscriptionDataFactory,
   ) {}
 
   async getUser(
@@ -17,15 +17,14 @@ export class UserService {
   ): Promise<IUser | null> {
     return this.userDataFactory.getUser(queryParameters, excludeProperties);
   }
-  async getUserWithPlan(
-    queryParameters: { [key: string]: string },
-    excludeProperties = false,
-  ): Promise<IUser | null> {
-    return this.userDataFactory.getUser(
-      queryParameters,
-      excludeProperties,
-      true,
-    );
+  async getUserSubscriptionWithPlan(queryParameters: {
+    [key: string]: string;
+  }) {
+    const response =
+      await this.subscriptionDataFactory.getSubscriptionAndUsage(
+        queryParameters,
+      );
+    return response;
   }
 
   createUser(createUserDto: CreateUserDto): Promise<IUser> {
