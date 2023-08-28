@@ -11,8 +11,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-
-
 (async () => {
   const createTablesSql = `
    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

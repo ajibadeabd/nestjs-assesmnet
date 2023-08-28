@@ -1,6 +1,5 @@
 import { expose } from 'threads/worker';
 import { calculateBillingAmount } from 'bill_amount';
-import { calculateRenewalAndExpiration } from '../util';
 import { decrypt } from '../util/index';
 import Axios from 'axios';
 

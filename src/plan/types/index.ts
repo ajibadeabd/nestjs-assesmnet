@@ -1,6 +1,4 @@
 import {
-  IsInt,
-  Min,
   IsUUID,
   IsDate,
   IsNumber,
