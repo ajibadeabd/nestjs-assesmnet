@@ -46,7 +46,7 @@ export const newWorker = expose({
       };
       try {
         // charge user again
-        const response = await Axios.post(
+        await Axios.post(
           process.env.PAYSTACK_BASE_URL + '/transaction/charge_authorization',
           body,
           {

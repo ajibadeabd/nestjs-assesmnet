@@ -1,11 +1,11 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { DatabaseService } from './dbPool';
-import { SubscriptionDto, UsageDetails } from '../plan/types';
+import { PlanDto, SubscriptionDto, UsageDetails } from '../plan/types';
 
 @Injectable()
 export class PlanDataFactory {
   constructor(private readonly databaseService: DatabaseService) {}
-  async getPlans(): Promise<any> {
+  async getPlans(): Promise<PlanDto[]> {
     const query = `SELECT id, name, description, price, subscription_tier, usage_limits, currency, payment_frequency
 FROM plans;
 `;
@@ -14,7 +14,7 @@ FROM plans;
     return response.rows;
   }
 
-  async getPlan(planId: string): Promise<any> {
+  async getPlan(planId: string): Promise<PlanDto> {
     const query = `
     SELECT id, name, description, price, subscription_tier, usage_limits, currency, payment_frequency
     FROM plans

@@ -14,9 +14,9 @@ export class DatabaseService implements OnModuleInit {
       database: this.configService.get<string>('DB_NAME', 'mydb'),
       password: this.configService.get<string>('DB_PASSWORD', 'password'),
       port: this.configService.get<number>('DB_PORT', 5432),
-      ssl: {
-        rejectUnauthorized: false, // Set to true if you have the proper SSL certificates
-      },
+      // ssl: {
+      //   rejectUnauthorized: false, // Set to true if you have the proper SSL certificates
+      // },
     });
   }
 
