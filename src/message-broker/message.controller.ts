@@ -9,6 +9,7 @@ export class BrokerController {
 
   @EventPattern('calculate_billing')
   async handleTicketProcessing(@Payload() data) {
+    console.log('recieve');
     return new Promise(async (resolve) => {
       const worker = await spawn(new Worker('./billing.worker.js'));
       const response = await worker.getBillingDetails(JSON.parse(data));

@@ -8,6 +8,7 @@ export class BrokerService {
   ) {}
 
   async processBilling(data) {
+    console.log('fire');
     this.RmqService.emit('calculate_billing', JSON.stringify(data));
   }
 }

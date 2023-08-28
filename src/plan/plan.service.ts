@@ -30,7 +30,7 @@ export class PlansService {
       });
 
     if (subscriptionResponse.usage_history_end_date > new Date()) {
-      throw new HttpException('not yet time to bill user', 400);
+      throw new HttpException('Not yet time to bill user', 400);
     }
     this.brokerService.processBilling(subscriptionResponse);
 
