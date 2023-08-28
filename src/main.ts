@@ -62,8 +62,7 @@ async function bootstrap() {
       ],
     },
   });
-  console.log(process.env.NODE_ENV);
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'developmednt') {
     const pathToSwaggerStaticFolder = resolve(process.cwd(), 'swagger-static');
 
     // write swagger json file

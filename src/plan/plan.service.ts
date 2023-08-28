@@ -48,6 +48,7 @@ export class PlansService {
     await this.createSubscriptionUsageAndBilling(
       id,
       data.metadata.billingCycle,
+      data.amount,
     );
     await this.paymentDetailsService.savePaymentAuthCode(
       id,
@@ -58,6 +59,7 @@ export class PlansService {
   async createSubscriptionUsageAndBilling(
     userId: string,
     billingCycle: string,
+    amount: number,
   ) {
     const { startDate, expirationDate } = calculateRenewalAndExpiration(
       billingCycle,
@@ -67,14 +69,15 @@ export class PlansService {
       userId,
       startDate,
       expirationDate,
+      amount,
     );
   }
   async initializePayment(planId: string, user: IUser) {
     if (user.plan_id) {
-      throw new HttpException(
-        'You are already subscribed to a plan. You cannot subscribe again.',
-        400,
-      );
+      // throw new HttpException(
+      //   'You are already subscribed to a plan. You cannot subscribe again.',
+      //   400,
+      // );
     }
     const plan = await this.planDataFactory.getPlan(planId);
 
