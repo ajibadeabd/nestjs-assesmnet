@@ -3,12 +3,23 @@ import { config } from 'dotenv';
 
 config();
 
+// const pool = new Pool({
+//   user: process.env.DB_USER || 'postgres',
+//   host: process.env.DB_HOST || 'localhost',
+//   database: process.env.DB_NAME || 'salla-db',
+//   password: process.env.DB_PASSWORD || 'password',
+//   port: 5432,
+// });
+
 const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_NAME || 'salla-db',
-  password: process.env.DB_PASSWORD || 'password',
-  port: 5432,
+  user: 'salla_db_user', // Replace with the actual username
+  host: 'dpg-cjn1j9njbvhs739a9uj0-a.oregon-postgres.render.com', // Replace with the actual host
+  database: 'salla_db', // Replace with the actual database name
+  password: 'ePyZkntYu8gHGKqKhKg3ZpiEHdNLF9Y2', // Replace with the actual password
+  port: 5432, // Default PostgreSQL port
+  ssl: {
+    rejectUnauthorized: false, // Set to true if you have the proper SSL certificates
+  },
 });
 
 (async () => {
