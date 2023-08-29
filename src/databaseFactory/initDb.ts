@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS billing_history (
  
 CREATE TABLE IF NOT EXISTS payment_details (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL,
+  user_id UUID  NOT NULL UNIQUE,
   auth_code TEXT NOT NULL,
   payment_date TIMESTAMP NOT NULL DEFAULT NOW(),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),

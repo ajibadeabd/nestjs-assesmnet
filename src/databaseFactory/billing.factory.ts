@@ -1,6 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { DatabaseService } from './dbPool';
-import { SubscriptionDto, UsageDetails } from '../plan/types';
 
 @Injectable()
 export class BillingDataFactory {

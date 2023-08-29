@@ -1,0 +1,219 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User login successful"
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/plans": {
+      "get": {
+        "operationId": "PlansController_getPlans",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Plans retrieved successfully"
+          }
+        },
+        "tags": [
+          "plans"
+        ]
+      },
+      "post": {
+        "operationId": "PlansController_createSubscription",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanIdValidation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Plan created successfully"
+          }
+        },
+        "tags": [
+          "plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/plans/callback": {
+      "post": {
+        "operationId": "PlansController_paymentResponse",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "plans"
+        ]
+      }
+    },
+    "/plans/bill": {
+      "post": {
+        "operationId": "PlansController_billUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserIdValidation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User billed successfully"
+          }
+        },
+        "tags": [
+          "plans"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Billing/Plan services ",
+    "description": "API Documentation for Billing",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "secretpassword"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "LoginUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "secretpassword"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "UserIdValidation": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "045f6655-ff69-4d76-bda1-20881c2d8e9d"
+          }
+        },
+        "required": [
+          "userId"
+        ]
+      },
+      "PlanIdValidation": {
+        "type": "object",
+        "properties": {
+          "planId": {
+            "type": "string",
+            "example": "7187364c-47f2-4642-8770-58d85aca81eb"
+          }
+        },
+        "required": [
+          "planId"
+        ]
+      }
+    }
+  }
+}
