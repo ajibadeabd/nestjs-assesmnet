@@ -10,11 +10,12 @@ import {
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger'; // Import swagger annotations
 import { HttpResponse } from '../util';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { PlansService } from './subscription.service';
+import { PlansService } from './plan.service';
 import { PlanIdValidation, UserIdValidation } from './types';
 
 @ApiTags('plans') // Tag the controller with 'plans' for Swagger documentation
 @Controller('plans')
+@ApiTags('plans')
 export class PlansController {
   constructor(private readonly plansService: PlansService) {}
 
@@ -23,6 +24,12 @@ export class PlansController {
   async getPlans(@Res() response) {
     const result = await this.plansService.getAvailablePlans();
     return HttpResponse.ok(response, result, 'Plans retrieved successfully');
+  }
+
+  @Post('callback')
+  async paymentResponse(@Res() response, @Body() userData) {
+    await this.plansService.createSubscription(userData);
+    return HttpResponse.ok(response, {}, 'Plans retrieved successfully');
   }
 
   @ApiResponse({ status: 201, description: 'User billed successfully' }) // Add Swagger response annotation
@@ -45,7 +52,7 @@ export class PlansController {
   ) {
     const planId = planIdValidation.planId;
 
-    const result = await this.plansService.createSubscription(
+    const result = await this.plansService.initializePayment(
       planId,
       request.user,
     );

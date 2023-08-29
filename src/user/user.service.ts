@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/auth/types';
 import { IUser } from './type';
 import { UserDataFactory } from '../databaseFactory/user.factory';
-import { SubscriptionDataFactory } from '../databaseFactory/subscription.factory';
+import { PlanDataFactory } from '../databaseFactory/plan.factory';
 
 @Injectable()
 export class UserService {
   constructor(
     private userDataFactory: UserDataFactory,
-    private subscriptionDataFactory: SubscriptionDataFactory,
+    private subscriptionDataFactory: PlanDataFactory,
   ) {}
 
   async getUser(
@@ -17,6 +17,13 @@ export class UserService {
   ): Promise<IUser | null> {
     return this.userDataFactory.getUser(queryParameters, excludeProperties);
   }
+  async updateUserDetails(
+    planId: string,
+    email: string,
+  ): Promise<IUser | null> {
+    return this.userDataFactory.updateUserDetails(planId, email);
+  }
+
   async getUserSubscriptionWithPlan(queryParameters: {
     [key: string]: string;
   }) {

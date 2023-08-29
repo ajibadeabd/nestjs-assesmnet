@@ -17,7 +17,7 @@ import { DatabaseModule } from '../databaseFactory/database.module';
         signOptions: {
           expiresIn: '366d',
         },
-        secret: 'JWT_SECRET',
+        secret: process.env.JWT_SECRET_KEY || 'JWT_SECRET',
       }),
       inject: [ConfigService],
     }),

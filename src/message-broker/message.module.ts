@@ -3,6 +3,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { BrokerService } from './message.service';
 import { BrokerController } from './message.controller';
+import { DatabaseModule } from '../databaseFactory/database.module';
 @Module({
   imports: [
     ClientsModule.register([
@@ -18,6 +19,7 @@ import { BrokerController } from './message.controller';
         },
       },
     ]),
+    DatabaseModule,
   ],
   controllers: [BrokerController],
   providers: [BrokerService],

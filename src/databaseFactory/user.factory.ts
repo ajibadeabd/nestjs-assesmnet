@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/auth/types';
 import { DatabaseService } from './dbPool';
-import { v4 as uniqueId } from 'uuid';
 import { IUser } from 'src/user/type';
 // import { IUser } from './type';
 
@@ -50,12 +49,11 @@ export class UserDataFactory {
 
   async createUser(createUserDto: CreateUserDto): Promise<IUser> {
     const query = `
-    INSERT INTO users (id, name, email, password, updated_at)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING id, name, email, created_at, updated_at;
+    INSERT INTO users ( name, email, password, updated_at)
+    VALUES ($1, $2, $3, $4)
+    RETURNING id, name, email, updated_at;
   `;
     const values = [
-      uniqueId(),
       createUserDto.name,
       createUserDto.email,
       createUserDto.password,
@@ -67,5 +65,18 @@ export class UserDataFactory {
     } catch (error) {
       throw error;
     }
+  }
+  async updateUserDetails(planId: string, email: string) {
+    try {
+      const query = `
+    UPDATE users
+    SET plan_id = $1, updated_at = $2
+    WHERE email = $3
+    RETURNING id;
+  `;
+      const values = [planId, new Date(), email];
+      const response = await this.databaseService.query(query, values);
+      return response.rows[0];
+    } catch (error) {}
   }
 }

@@ -1,5 +1,5 @@
-import { PlansController } from './subscription.controller';
-import { PlansService } from './subscription.service';
+import { PlansController } from './plan.controller';
+import { PlansService } from './plan.service';
 
 describe('PlansController', () => {
   let plansController: PlansController;

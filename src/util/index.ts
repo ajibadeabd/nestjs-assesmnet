@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
+import * as CryptoJS from 'crypto-js';
 
 export class HttpResponse {
   static ok = (
@@ -48,4 +49,25 @@ export const calculateRenewalAndExpiration = (billingCycle, currentDate) => {
 
     return { renewalDate, expirationDate, startDate: nextYear };
   }
+};
+
+// Replace this with a proper key generation and management mechanism
+
+export const encrypt = (data: string, secretKey: string): string => {
+  // return CryptoJS.AES.encrypt(data, secretKey).toString();
+
+  console.log({ secretKey });
+  return CryptoJS.AES.encrypt(JSON.stringify({ data }), 'secretKey').toString();
+};
+
+export const decrypt = (encryptedData: string, secretKey: string): string => {
+  console.log({ secretKey });
+
+  // const decrypted = CryptoJS.AES.decrypt(encryptedData, secretKey);
+  // return decrypted.toString(CryptoJS.enc.Utf8);
+  return JSON.parse(
+    CryptoJS.AES.decrypt(encryptedData, 'secretKey').toString(
+      CryptoJS.enc.Utf8,
+    ),
+  ).data;
 };

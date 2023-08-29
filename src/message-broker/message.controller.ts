@@ -1,36 +1,31 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
-import { calculateBillingAmount } from 'bill_amount';
+import { UsageDataFactory } from '../databaseFactory/usage.factory';
+import { spawn, Thread, Worker } from 'threads';
 
 @Controller()
 export class BrokerController {
-  constructor() {}
+  constructor(private readonly usageDataFactory: UsageDataFactory) {}
 
   @EventPattern('calculate_billing')
   async handleTicketProcessing(@Payload() data) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const response = this.getBillingDetails(JSON.parse(data));
-        console.log(response);
-        resolve(response);
-      }, 10000);
-    });
-  }
+    return new Promise(async (resolve) => {
+      const worker = await spawn(new Worker('./billing.worker.js'));
+      const response = await worker.getBillingDetails(JSON.parse(data));
 
-  private getBillingDetails(subscriptionResponse) {
-    const subscriptionPlan = {
-      price: subscriptionResponse.price,
-      id: subscriptionResponse.id,
-      usage_limits: subscriptionResponse.usage_limits,
-      currency: subscriptionResponse.currency,
-      payment_frequency: subscriptionResponse.billing_cycle,
-    };
-
-    const usageData =
-      subscriptionResponse.latest_usage_history[0].usage_details;
-    return calculateBillingAmount({
-      subscriptionPlan,
-      usageData,
+      const { status } = await worker.debitUser({
+        currency: response.currency,
+        amount: response.amount,
+        email: response.email,
+        planId: response.planId,
+        userId: response.userId,
+        payment_frequency: response.payment_frequency,
+      });
+      if (status) {
+        await worker.updateFormalUsage(response.userId);
+      }
+      await Thread.terminate(worker);
+      resolve(response);
     });
   }
 }

@@ -12,17 +12,16 @@ import { ApiProperty } from '@nestjs/swagger'; // Import ApiProperty
 
 // plan-id-validation.dto.ts
 export class PlanIdValidation {
-  @ApiProperty({ example: 1 })
-  @IsInt({ message: 'Plan ID must be an integer' })
-  @Min(1, { message: 'Invalid Plan ID' })
-  planId: number = 1; // Default plan ID
+  @ApiProperty({ example: '7187364c-47f2-4642-8770-58d85aca81eb' })
+  @IsUUID('4', { message: 'User ID must be a valid UUID' })
+  planId: string;
 }
 
 // user-id-validation.dto.ts
 export class UserIdValidation {
-  @ApiProperty({ example: 'a4ef6b46-9422-4d3d-a3ea-4eaae2ddec4d' }) // Add ApiProperty decorator with example value
+  @ApiProperty({ example: '045f6655-ff69-4d76-bda1-20881c2d8e9d' }) // Add ApiProperty decorator with example value
   @IsUUID('4', { message: 'User ID must be a valid UUID' })
-  userId: string = 'a4ef6b46-9422-4d3d-a3ea-4eaae2ddec4d'; // Default UUID
+  userId: string;
 }
 
 export class PlanDto {

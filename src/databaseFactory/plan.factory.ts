@@ -1,36 +1,70 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { DatabaseService } from './dbPool';
-import { SubscriptionDto, UsageDetails } from '../subscription/types';
+import { SubscriptionDto, UsageDetails } from '../plan/types';
 
 @Injectable()
-export class SubscriptionDataFactory {
+export class PlanDataFactory {
   constructor(private readonly databaseService: DatabaseService) {}
+  async getPlans(): Promise<any> {
+    const query = `SELECT id, name, description, price, subscription_tier, usage_limits, currency, payment_frequency
+FROM plans;
+`;
+
+    const response = await this.databaseService.query(query);
+    return response.rows;
+  }
+
+  async getPlan(planId: string): Promise<any> {
+    const query = `
+    SELECT id, name, description, price, subscription_tier, usage_limits, currency, payment_frequency
+    FROM plans
+    WHERE id = $1;
+  `;
+
+    const values = [planId];
+
+    try {
+      const response = await this.databaseService.query(query, values);
+      return response.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async getSubscriptionAndUsage(queryParameter): Promise<any> {
     try {
       const query = `
-              SELECT subscriptions.id, price,billing_cycle ,expiration_date, currency,usage_limits,
-              (
-                  SELECT json_agg(usage_history)
-                  FROM (
-                    SELECT *
-                    FROM usage_history
-                    WHERE usage_history.subscription_id = subscriptions.id
-                    ORDER BY created_at DESC
-                    LIMIT 1
-                  ) AS latest_usage_history
-              ) AS latest_usage_history
-              FROM subscriptions
-              LEFT JOIN usage_history ON subscriptions.id = usage_history.subscription_id
-              WHERE subscriptions.user_id = $1
-              GROUP BY subscriptions.id;
-              `;
+      SELECT
+        users.id AS user_id,
+        users.name AS user_name,
+        users.email AS user_email,
+        plans.id AS plan_id,
+        plans.name AS plan_name,
+        plans.currency AS currency,
+        plans.payment_frequency AS billing_cycle,
+        plans.usage_limits AS plan_usage,
+        plans.price AS plan_price,
+        plans.subscription_tier AS plan_subscription_tier,
+         usage_history.api_usage,
+         usage_history.storage_usage
+      FROM
+        users
+      LEFT JOIN
+        plans ON users.plan_id = plans.id
+        LEFT JOIN
+  usage_history ON users.id = usage_history.user_id AND usage_history.status = 'active'
+      WHERE
+        users.id = $1;
+    `;
+
       const response = await this.databaseService.query(query, [
         queryParameter.userId,
       ]);
+
       if (!response.rows.length) {
-        throw new HttpException('Wrong User id', 400);
+        throw new HttpException('User not found', 404);
       }
+
       return response.rows[0];
     } catch (error) {
       throw error;
