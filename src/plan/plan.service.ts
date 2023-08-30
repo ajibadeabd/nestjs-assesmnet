@@ -74,10 +74,10 @@ export class PlansService {
   }
   async initializePayment(planId: string, user: IUser) {
     if (user.plan_id) {
-      // throw new HttpException(
-      //   'You are already subscribed to a plan. You cannot subscribe again.',
-      //   400,
-      // );
+      throw new HttpException(
+        'You are already subscribed to a plan. You cannot subscribe again.',
+        400,
+      );
     }
     const plan = await this.planDataFactory.getPlan(planId);
 
